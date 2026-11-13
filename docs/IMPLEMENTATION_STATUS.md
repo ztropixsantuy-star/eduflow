@@ -1,23 +1,25 @@
-# Implementation checkpoint
+# EduFlow implementation checkpoint
 
-## Status
-Starter scaffold generated. Initial repository bootstrap in progress.
+## Sprint 1 completed
+- Public sign-up creates student accounts only.
+- Student can submit an instructor access request.
+- Admin can approve/reject instructor requests; approval changes the trusted profile role.
+- Instructor/admin can create published classes.
+- Students can join published classes using invite codes.
+- Invite codes are not selectable through the general courses Data API; owners retrieve their code through an owner-checked RPC.
+- Admin-only profile visibility uses a private helper to avoid recursive RLS.
+- Dashboard navigation includes the instructor workspace.
 
-## Included in starter package
-- Next.js application skeleton
-- Landing page and responsive design
-- Auth routes and server actions
-- Student dashboard and route shells
-- Supabase SSR helpers and middleware
-- Initial PostgreSQL schema and RLS policies
-- Product requirements and setup documentation
+## Not completed / requires QA
+- Lesson authoring and private file storage.
+- Course detail page and member management.
+- Assignment creation, submissions and grading.
+- Quiz authoring, secure grading endpoint and attempts.
+- Admin account management, announcements, notifications and analytics.
+- Automated tests, dependency install, lint and production build.
 
-## Not completed / needs QA
-- Dependency installation and production build
-- Supabase migration application and integration tests
-- Course, assignment, quiz, instructor and admin workflows
-- Storage bucket policies and secure quiz grading endpoint
-- End-to-end tests and production deployment
+## One-time setup
+Follow ADMIN_BOOTSTRAP.md to promote the project owner's account to admin after registering and confirming the account.
 
-## Next step
-Implement course creation/enrollment, then lessons, assignments and quizzes.
+## Deferred by decision
+AI tutor, AI question generation, AI recommendations, gamification, badges, leaderboard, billing and multi-institution support.
