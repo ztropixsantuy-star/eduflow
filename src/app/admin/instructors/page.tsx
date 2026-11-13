@@ -1,0 +1,11 @@
+import Link from "next/link";
+import {redirect} from "next/navigation";
+import {createClient} from "@/lib/supabase/server";
+import {reviewInstructorRequest} from "@/app/auth/actions";
+export default async function InstructorApprovals({searchParams}:{searchParams:Promise<{error?:string;message?:string}>}){
+ const params=await searchParams,supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)redirect("/login");
+ const {data:profile}=await supabase.from("profiles").select("role").eq("id",user.id).single();if(profile?.role!=="admin")redirect("/dashboard");
+ const {data:requests}=await supabase.from("instructor_requests").select("id,user_id,message,status,created_at,profiles(full_name)").eq("status","pending").order("created_at",{ascending:true});
+ return <main className="simple-page"><Link href="/teach" className="back-link">← Ruang pengajar</Link><div className="section-kicker">ADMINISTRATION</div><h1>Permohonan pengajar</h1><p className="muted">Tinjau permohonan dan berikan akses pengajar hanya kepada akun yang disetujui.</p>{params.error&&<p className="alert">{params.error}</p>}{params.message&&<p className="success">{params.message}</p>}
+ <section className="panel section-panel">{requests?.length?requests.map((item:any)=><article className="request-row" key={item.id}><div><strong>{item.profiles?.full_name||"Pengguna EduFlow"}</strong><small>{item.user_id}</small><p>{item.message||"Tidak ada keterangan tambahan."}</p><small>{new Date(item.created_at).toLocaleString("id-ID")}</small></div><div className="request-actions"><form action={reviewInstructorRequest}><input type="hidden" name="requestId" value={item.id}/><input type="hidden" name="approve" value="true"/><button className="button button-small" type="submit">Setujui</button></form><form action={reviewInstructorRequest}><input type="hidden" name="requestId" value={item.id}/><input type="hidden" name="approve" value="false"/><button className="button button-small button-danger" type="submit">Tolak</button></form></div></article>):<div className="empty-state"><div>✓</div><strong>Tidak ada permohonan pending</strong><p>Permohonan baru akan muncul di sini.</p></div>}</section></main>;
+}
